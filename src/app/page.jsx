@@ -301,7 +301,7 @@ const I18N = {
       promiseKicker: "Mūsu solījums",
       promiseDesc: "Tīrs, phone-first gids, kas var būt live ar vienu partneri ļoti ātri.",
     },
-    founders: { kicker: "Komanda", title: "Dibinātāji", desc: "StoryPath veido neliela komanda Latvijā.", label: "Dibinātāji" },
+    founders: { kicker: "Komanda", title: "Dibinātāji", desc: "StoryPath veido neliela komanda Latvijā.", label: "" },
     contact: {
       kicker: "Kontakti",
       title: "Pieteikt demo",
@@ -414,13 +414,13 @@ function Hero({ t }) {
             transition={{ duration: 0.5 }}
             className="flex flex-col justify-center"
           >
-            <div className="relative mt-1 h-28 w-full max-w-md overflow-hidden rounded-3xl">
+            <div className="relative -mt-1 h-85 w-full max-w-md overflow-hidden rounded-3xl">
               <img
-                src="/images/hero-audio.jpg"
+                src="/images/hero-audio.png"
                 alt="Audio guide experience"
                 className="h-full w-full object-cover"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-white/20" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-l from-white/95 via-white/45 to-white/7" />
             </div>
 
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl">
