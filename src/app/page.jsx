@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -15,6 +16,8 @@ import {
   Mail,
   Phone,
   Languages,
+  Menu,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -45,15 +48,15 @@ const I18N = {
       requestDemo: "Buy now",
     },
     hero: {
-      title: "Vietas, kas stāsta.",
+      title: "Places that tell a story",
       desc:
-        "StoryPath ir viegls audio un stāstu gids pilsētām, muzejiem un dabas parkiem. Lietotāji sāk bez maksas. Partneri maksā par mūsdienīgu QR atvēršanas gidu apmeklētāja telefonā.",
-      ctaPrimary: "Pirkt piekļuvi",
+        "StoryPath is a lightweight audio and storytelling guide for cities, museums, and nature parks. Users start for free. Partners pay for a modern QR-activated guide on the visitor's phone.",
+      ctaPrimary: "Buy now",
       ctaSecondary: "Uzzināt vairāk",
       stats: [
-        { k: "Live UI", v: "reāls interfeiss" },
-        { k: "QR", v: "partneru piekļuve" },
-        { k: "LV", v: "starts Latvijā" },
+        { k: "Live UI", v: "reāl interface" },
+        { k: "QR", v: "partners acess" },
+        { k: "LV", v: "launch in Latvia" },
       ],
     },
     phone: {
@@ -353,10 +356,15 @@ function LangToggle({ lang, setLang }) {
 }
 
 function Nav({ t, lang, setLang }) {
+  const [open, setOpen] = useState(false);
+
   const scrollTop = (e) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setOpen(false);
   };
+
+  const closeMenu = () => setOpen(false);
 
   return (
     <div className="sticky top-0 z-50 border-b border-neutral-200/70 bg-white/80 backdrop-blur">
@@ -381,21 +389,94 @@ function Nav({ t, lang, setLang }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <Languages className="h-4 w-4 text-neutral-500" />
               <LangToggle lang={lang} setLang={setLang} />
             </div>
-            <Button asChild variant="ghost" className="rounded-full hidden sm:inline-flex">
+
+            {/* Desktop demo */}
+            <Button asChild className="rounded-full hidden md:inline-flex bg-neutral-900 text-white hover:bg-neutral-800">
+              <Link href="/demo">Demo</Link>
+            </Button>
+
+            <Button asChild variant="ghost" className="rounded-full hidden md:inline-flex">
               <a href="#contact">{t.nav.contact}</a>
             </Button>
-            <Button asChild className="rounded-full">
+
+            <Button asChild className="rounded-full hidden md:inline-flex">
               <a href="#contact">
                 {t.nav.requestDemo} <ArrowRight className="ml-2 h-4 w-4" />
               </a>
             </Button>
+
+            {/* Mobile hamburger */}
+            <button
+              type="button"
+              className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white"
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Open menu"
+            >
+              {open ? <X className="h-5 w-5 text-neutral-900" /> : <Menu className="h-5 w-5 text-neutral-900" />}
+            </button>
           </div>
         </div>
       </Container>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden border-t border-neutral-200/70 bg-white">
+          <Container>
+            <div className="py-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <Languages className="h-4 w-4 text-neutral-500" />
+                <LangToggle lang={lang} setLang={setLang} />
+              </div>
+
+              <div className="grid gap-2 text-sm">
+                <a className="rounded-2xl px-3 py-3 hover:bg-neutral-50 border border-neutral-200" href="#product" onClick={closeMenu}>
+                  {t.nav.product}
+                </a>
+                <a className="rounded-2xl px-3 py-3 hover:bg-neutral-50 border border-neutral-200" href="#how" onClick={closeMenu}>
+                  {t.nav.how}
+                </a>
+                <a className="rounded-2xl px-3 py-3 hover:bg-neutral-50 border border-neutral-200" href="#pricing" onClick={closeMenu}>
+                  {t.nav.pricing}
+                </a>
+                <a className="rounded-2xl px-3 py-3 hover:bg-neutral-50 border border-neutral-200" href="#partners" onClick={closeMenu}>
+                  {t.nav.partners}
+                </a>
+                <a className="rounded-2xl px-3 py-3 hover:bg-neutral-50 border border-neutral-200" href="#founders" onClick={closeMenu}>
+                  {t.nav.founders}
+                </a>
+
+                <Link
+                  href="/demo"
+                  onClick={closeMenu}
+                  className="rounded-2xl px-3 py-3 border border-neutral-200 bg-neutral-900 text-white hover:bg-neutral-800 text-center font-medium"
+                >
+                  Demo
+                </Link>
+
+                <a
+                  href="#contact"
+                  onClick={closeMenu}
+                  className="rounded-2xl px-3 py-3 border border-neutral-200 hover:bg-neutral-50 text-center font-medium"
+                >
+                  {t.nav.contact}
+                </a>
+
+                <a
+                  href="#contact"
+                  onClick={closeMenu}
+                  className="rounded-2xl px-3 py-3 bg-neutral-900 text-white hover:bg-neutral-800 text-center font-medium"
+                >
+                  {t.nav.requestDemo}
+                </a>
+              </div>
+            </div>
+          </Container>
+        </div>
+      )}
     </div>
   );
 }
@@ -584,7 +665,7 @@ function PhoneMock({ t }) {
 }
 
 function RouteMini({ title, tag }) {
-  const isPartner = String(tag).toLowerCase().includes("partner"); // works for Partner / Partneris
+  const isPartner = String(tag).toLowerCase().includes("partner");
   return (
     <div className="rounded-3xl border border-neutral-200 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
@@ -617,7 +698,11 @@ function SectionTitle({ kicker, title, desc, id }) {
 }
 
 function Product({ t }) {
-  const icons = [<Sparkles key="i1" className="h-5 w-5" />, <QrCode key="i2" className="h-5 w-5" />, <ShieldCheck key="i3" className="h-5 w-5" />];
+  const icons = [
+    <Sparkles key="i1" className="h-5 w-5" />,
+    <QrCode key="i2" className="h-5 w-5" />,
+    <ShieldCheck key="i3" className="h-5 w-5" />,
+  ];
 
   return (
     <section className="bg-neutral-50 py-16 md:py-20" id="product">
@@ -667,7 +752,11 @@ function Product({ t }) {
 }
 
 function HowItWorks({ t }) {
-  const stepIcons = [<MapPin key="s1" className="h-5 w-5" />, <QrCode key="s2" className="h-5 w-5" />, <Play key="s3" className="h-5 w-5" />];
+  const stepIcons = [
+    <MapPin key="s1" className="h-5 w-5" />,
+    <QrCode key="s2" className="h-5 w-5" />,
+    <Play key="s3" className="h-5 w-5" />,
+  ];
 
   return (
     <section className="bg-white py-16 md:py-20" id="how">
